@@ -9,8 +9,7 @@ class TreeIterator
 {
 public:
 	TreeIterator(boost::shared_ptr<TreeElement> root);
-	const bool hasNext();
-	boost::shared_ptr<TreeElement> next();
+
 
 private:
 	TreeIterator();

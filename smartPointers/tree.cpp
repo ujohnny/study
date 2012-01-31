@@ -1,5 +1,4 @@
 #include "tree.h"
-#include "treeElement.h"
 
 Tree::Tree()
 {
