@@ -13,4 +13,4 @@ treeIterator.o : treeIterator.h treeIterator.cpp treeElement.h
 	$(CXX) $(FLAGS) $(INCLUDES) treeIterator.cpp -o treeIterator.o
 
 clean: 
-	rm libTreeIterator.so $(OBJECTS)
+	rm libtree.so $(OBJECTS)
