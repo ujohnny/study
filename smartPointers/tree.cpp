@@ -1,7 +1,17 @@
 #include "tree.h"
+#include "treeElement.h"
+#include "treeIterator.h"
 
 Tree::Tree()
 {
+}
+
+TreeIterator Tree::begin() {
+	return TreeIterator(mRoot, true);
+}
+
+TreeIterator Tree::end() {
+	return TreeIterator(mRoot, false);
 }
 
 void Tree::insert(int value) {
@@ -14,18 +24,20 @@ void Tree::insert(int value) {
 
 	boost::shared_ptr<TreeElement> tmp = mRoot;
 	while (1) {
-		if (value < tmp.get()->getValue()) {
-			if (tmp.get()->getLeftChild()) {
-				tmp = tmp.get()->getLeftChild();
+		if (value < tmp->getValue()) {
+			if (tmp->getLeftChild()) {
+				tmp = tmp->getLeftChild();
 			} else {
-				tmp.get()->setLeftChild(elementToInsert);
+				tmp->setLeftChild(elementToInsert);
+				elementToInsert->setParent(tmp);
 				return;
 			}
 		} else {
-			if (tmp.get()->getRightChild()) {
-				tmp = tmp.get()->getRightChild();
+			if (tmp->getRightChild()) {
+				tmp = tmp->getRightChild();
 			} else {
-				tmp.get()->setRightChild(elementToInsert);
+				tmp->setRightChild(elementToInsert);
+				elementToInsert->setParent(tmp);
 				return;
 			}
 		}
@@ -39,8 +51,4 @@ void Tree::remove(int value) {
 
 const bool Tree::contains(int value) const {
 
-}
-
-TreeIterator Tree::iterator() const {
-	return TreeIterator(mRoot);
 }

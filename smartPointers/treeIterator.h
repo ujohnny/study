@@ -1,29 +1,21 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
-#include <stack>
 
 class TreeElement;
 
 class TreeIterator
 {
 public:
-	TreeIterator(boost::shared_ptr<TreeElement> root);
-
+	TreeIterator(boost::shared_ptr<TreeElement> element, bool isBegin);
 
 private:
-	TreeIterator();
-
-	inline void setCurrentElement(boost::shared_ptr<TreeElement> element) {
-		mCurrentElement = element;
-	}
-
-	void goDown();
+	int operator*();
+	TreeIterator& operator++();
+	TreeIterator& operator--();
 
 	boost::shared_ptr<TreeElement> mCurrentElement;
-	std::stack<boost::shared_ptr<TreeElement> > mHistoryStack;
+	//std::stack<boost::shared_ptr<TreeElement> > mHistoryStack;
 
-	bool mIsGoingDownLeft;
-	bool mIsGoingDownRight;
 };
 

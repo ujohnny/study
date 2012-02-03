@@ -1,7 +1,9 @@
 #pragma once
 
-#include "treeElement.h"
-#include "treeIterator.h"
+#include <boost/shared_ptr.hpp>
+
+class TreeIterator;
+class TreeElement;
 
 class Tree
 {
@@ -10,10 +12,17 @@ public:
 	void insert(int value);
 	void remove(int value);
 	const bool contains(int value) const;
-	TreeIterator iterator() const;
+
+	TreeIterator begin();
+	TreeIterator end();
+	
+	typedef TreeIterator iterator;
+
+	inline boost::shared_ptr<TreeElement> getRoot() {
+		return mRoot;
+	}
 
 private:
 	boost::shared_ptr<TreeElement> mRoot;
-
 };
 
