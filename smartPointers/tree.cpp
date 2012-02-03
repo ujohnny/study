@@ -1,6 +1,5 @@
 #include "tree.h"
 #include "treeElement.h"
-#include "treeIterator.h"
 
 Tree::Tree()
 {

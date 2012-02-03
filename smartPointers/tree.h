@@ -1,8 +1,8 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
+#include "treeIterator.h"
 
-class TreeIterator;
 class TreeElement;
 
 class Tree

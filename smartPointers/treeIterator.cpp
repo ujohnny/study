@@ -1,6 +1,10 @@
 #include "treeElement.h"
 #include "treeIterator.h"
 
+TreeIterator::TreeIterator() 
+{
+}
+
 TreeIterator::TreeIterator(boost::shared_ptr<TreeElement> element
 	, bool const isBegin)
 {
@@ -57,4 +61,24 @@ TreeIterator& TreeIterator::operator--() {
 		}
 	}
 	return *this;
+}
+
+TreeIterator TreeIterator::operator++(int) {
+	TreeIterator result = (*this);
+	++(*this);
+	return result;
+}
+
+TreeIterator TreeIterator::operator--(int) {
+	TreeIterator result = (*this);
+	--(*this);
+	return result;
+}
+
+const bool TreeIterator::operator==(TreeIterator i) const {
+	return (i.getCurrentElement() == mCurrentElement) ? true : false;
+}
+
+const bool TreeIterator::operator!=(TreeIterator i) const {
+	return (i.getCurrentElement() == mCurrentElement) ? false : true;
 }
