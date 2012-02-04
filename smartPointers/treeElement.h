@@ -5,6 +5,10 @@
 class TreeElement
 {
 public:
+	TreeElement()
+	{
+	}
+
 	TreeElement(int value)
 		: mValue(value)
 	{
@@ -34,11 +38,10 @@ public:
 		return mParent;
 	}
 
-	inline int getValue() const {
+	inline int& getValue() {
 		return mValue;
 	}
 private:
-	TreeElement();
 
 	int mValue;
 	boost::shared_ptr<TreeElement> mParent;

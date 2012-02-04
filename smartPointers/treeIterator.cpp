@@ -1,5 +1,6 @@
 #include "treeElement.h"
 #include "treeIterator.h"
+#include <iostream>
 
 TreeIterator::TreeIterator() 
 {
@@ -21,7 +22,7 @@ TreeIterator::TreeIterator(boost::shared_ptr<TreeElement> element
 	mCurrentElement = element;
 }
 
-int TreeIterator::operator*() {
+int& TreeIterator::operator*() {
 	return mCurrentElement->getValue();
 }
 

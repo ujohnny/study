@@ -9,8 +9,8 @@ class TreeIterator
 public:
 	TreeIterator();
 	TreeIterator(boost::shared_ptr<TreeElement> element, bool isBegin);
-
-	int operator*();
+	
+	int& operator*();
 	TreeIterator& operator++();
 	TreeIterator& operator--();
 	TreeIterator operator++(int);
@@ -23,6 +23,7 @@ public:
 	}
 
 private:
+	boost::shared_ptr<TreeElement> mEnd;
 	boost::shared_ptr<TreeElement> mCurrentElement;
 	//std::stack<boost::shared_ptr<TreeElement> > mHistoryStack;
 
