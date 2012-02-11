@@ -1,21 +1,32 @@
-#include "treeIteratorTest.h"
+#include <boost/test/minimal.hpp>
+#include "tree.h"
 
-void TreeIteratorTest::runTest() {
-	mTree.insert(0);
-	mTree.insert(10);
-	mTree.insert(4);
-	mTree.insert(3);
-	mTree.insert(2);
-	mTree.insert(1);
-	mTree.insert(9);
-	mTree.insert(8);
-	mTree.insert(7);
-	mTree.insert(5);
-	mTree.insert(6);
-	TreeIterator i = mTree.iterator();
-	int current = 0;
-	while (i.hasNext()) {
-		CPPUNIT_ASSERT_EQUAL(i.next().get()->getValue(), current);
-		current++;
-	}
+int test_main(int, char* []) {
+	Tree t;
+	t.insert(5);
+	t.insert(2);
+	t.insert(3);
+	t.insert(4);
+	t.insert(2);
+	t.insert(6);
+	t.insert(7);
+	t.insert(8);
+	Tree::iterator it = t.begin();
+
+	BOOST_CHECK(*it == 2);
+	it++;
+	BOOST_CHECK(*it == 2);
+	it++;
+	BOOST_CHECK(*it == 3);
+	it++;
+	BOOST_CHECK(*it == 4);
+	it++;
+	BOOST_CHECK(*it == 5);
+	it++;
+	BOOST_CHECK(*it == 6);
+	it++;
+	BOOST_CHECK(*it == 7);
+	it++;
+	BOOST_CHECK(*it == 8);
+	return boost::exit_success;
 }
