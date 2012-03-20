@@ -1,7 +1,5 @@
 #include <vector>
 
-typedef std::vector<int>::iterator iter;
-
 template <typename T>
 void merge(std::vector<T>& v, typename std::vector<T>::iterator beginPos
 		   , int size)
