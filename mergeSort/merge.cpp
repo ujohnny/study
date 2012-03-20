@@ -1,4 +1,3 @@
-#include <iostream>
 #include <vector>
 
 typedef std::vector<int>::iterator iter;
@@ -9,9 +8,9 @@ void merge(std::vector<T>& v, typename std::vector<T>::iterator beginPos
 {
 	typename std::vector<T>::iterator checked = beginPos;
 	typename std::vector<T>::iterator merging = beginPos + size / 2;
-	while (merging < beginPos + size) {
+	while (checked < merging && merging < beginPos + size) {
 		if (*checked > *merging) {
-			iter swapping = merging;
+			typename std::vector<T>::iterator swapping = merging;
 			int tmp = *merging;
 			while (swapping != checked) {
 				*swapping = *(--swapping);
@@ -24,24 +23,13 @@ void merge(std::vector<T>& v, typename std::vector<T>::iterator beginPos
 }
 
 template <typename T>
-void sort(std::vector<T>& v, typename std::vector<T>::iterator beginPos
+void msort(std::vector<T>& v, typename std::vector<T>::iterator beginPos
 		  , int size) 
 {
 	if (size <= 1)
 		return;
 	
-	sort(v, beginPos, size / 2);
-	sort(v, beginPos + size / 2, size / 2 + size % 2);
+	msort(v, beginPos, size / 2);
+	msort(v, beginPos + size / 2, size / 2 + size % 2);
 	merge(v, beginPos, size);
-}
-
-int main() {
-	std::vector<int> v;
-	for (int i = 11; i > 0; i--) {
-		v.push_back(i);
-	}
-	sort(v, v.begin(), v.size());
-	for (iter it = v.begin(); it < v.end(); it++) {
-		std::cout << *it << std::endl;
-	}
 }
