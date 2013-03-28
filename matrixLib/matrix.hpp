@@ -31,7 +31,7 @@ public:
 	};
 
 	const Matrix operator+(const Matrix& rhs) const {
-		Matrix res(_rows, _columns);
+		Matrix<T> res(_rows, _columns);
 		for (size_t i = 0; i < _rows; i++) {
 			for (size_t j = 0; j < _columns; j++) {
 				res[i][j] = (*_matrix)[i][j] + rhs[i][j];
@@ -41,7 +41,7 @@ public:
 	}
 
 	const Matrix operator-(const Matrix& rhs) const {
-		Matrix res(_rows, _columns);
+		Matrix<T> res(_rows, _columns);
 		for (size_t i = 0; i < _rows; i++) {
 			for (size_t j = 0; j < _columns; j++) {
 				res[i][j] = (*_matrix)[i][j] - rhs[i][j];;
@@ -50,7 +50,7 @@ public:
 		return res;
 	}
 
-	const Matrix& operator*(int scalar) {
+	const Matrix& operator*(T scalar) {
 		for (size_t i = 0; i < _rows; i++) {
 			for (size_t j = 0; j < _columns; j++) {
 				(*_matrix)[i][j] *= scalar;
@@ -60,10 +60,11 @@ public:
 	}
 
 	const Matrix operator*(const Matrix& rhs) {
-		Matrix result(_rows, rhs.columns());
+		Matrix<T> result(_rows, rhs.columns());
+
 		for (size_t i = 0; i < _rows; i++) {
 			for (size_t j = 0; j < rhs.columns(); j++) {
-				int tmp = 0;
+				T tmp = 0;
 				for (size_t k = 0; k < _columns; k++) {
 					tmp += (*_matrix)[i][k] * rhs[k][j];
 				}
@@ -74,11 +75,12 @@ public:
 	}
 
 	T determinant() {
+		Matrix<T> tmp(*this);
 		if (_rows == 2)
 			return ((*_matrix)[0][0] * (*_matrix)[1][1]) - ((*_matrix)[0][1] * (*_matrix)[1][0]);
 		T result = 0;
 		for (size_t i = 0; i < _columns; i++) {
-			result += (*_matrix)[0][i] * pow(-1, i) * (this->removeRow(0).removeColumn(i).determinant());
+			result += (*_matrix)[0][i] * pow(-1, i) * (tmp.removeRow(0).removeColumn(i).determinant());
 		}
 		return result;
 
@@ -138,17 +140,22 @@ public:
 	}
 
 	Matrix& transpose() {
+		std::vector<std::vector<T> > *new_matrix = new std::vector<std::vector<T> >(_columns, std::vector<T>(_rows));
+
 		for (size_t i = 0; i < _columns; i++) {
-			for (size_t j = 0; j < i; j++) {
-				T tmp = _matrix[i][j];
-				_matrix[i][j] = _matrix[j][i];
-				_matrix[j][i] = tmp;
+			for (size_t j = 0; j < _rows; j++) {
+				(*new_matrix)[i][j] = (*_matrix)[j][i];
 			}
 		}
+		delete _matrix;
+		_matrix = new_matrix;
+		int tmp = _rows;
+		_rows = _columns;
+		_columns = tmp;
 		return (*this);
 	}
 
-	void print(std::ostream& out = std::cout ) {
+	void print(std::ostream& out = std::cout ) const {
 		for (auto row_it = _matrix->begin(); row_it < _matrix->end(); row_it++) {
 			for (auto column_it = row_it->begin(); column_it < row_it->end(); column_it++) {
 				out << (*column_it) << "\t";
@@ -157,13 +164,13 @@ public:
 		}
 	}
 
-	void replaceRows(int first, int second) {
+	void swapRows(int first, int second) {
 		std::vector<int> tmp = (*_matrix)[first];
 		(*_matrix)[first] = (*_matrix)[second];
 		(*_matrix)[second] = tmp;
 	}
 
-	void replaceColumns(int first, int second) {
+	void swapColumns(int first, int second) {
 		for (auto it = _matrix->begin(); it < _matrix->end(); it++) {
 			int tmp = (*it)[first];
 			(*it)[first] = (*it)[second];
@@ -191,23 +198,49 @@ public:
 		removeRow(pos + 1);
 	}
 
-	int pNorm(int p) {
-		int result = 0;
+	void replaceColumn(int pos, std::vector<T> column) {
+		insertColumn(pos, column);
+		removeColumn(pos + 1);
+	}
+
+	void replaceRow(int pos, const Matrix& m) {
+		if (m.rows() != 1) {
+			return;
+		}
+		typename std::vector<T> row = (*m.matrix())[0];
+		replaceRow(pos, row);
+	}
+
+	void replaceColumn(int pos, const Matrix& m) {
+		if (m.columns() != 1) {
+			return;
+		}
+
+		typename std::vector<T> column;
+
+		for (auto it = m.matrix()->begin(); it < m.matrix()->end(); it++) {
+			column.push_back((*it)[0]);
+		}
+		replaceColumn(pos, column);
+	}
+
+	T pNorm(int p) const {
+		T result = 0;
 		switch (p) {
 		case 1:
 			for (int i = 0; i < _columns; i++) {
-				int tmp = 0;
+				T tmp = 0;
 				for (auto row_it = _matrix->begin(); row_it < _matrix->end(); row_it++) {
-					tmp += abs((*row_it)[i]);
+					tmp += fabs((*row_it)[i]);
 				}
 				result = (tmp > result) ? tmp : result;
 			}
 			break;
 		case 2:
 			for (int i = 0; i < _columns; i++) {
-				int tmp = 0;
+				T tmp = 0;
 				for (auto row_it = _matrix->begin(); row_it < _matrix->end(); row_it++) {
-					tmp += pow(abs((*row_it)[i]), 2);
+					tmp += pow(fabs((*row_it)[i]), 2);
 				}
 				tmp = sqrt(tmp);
 				result = (tmp > result) ? tmp : result;
@@ -216,10 +249,11 @@ public:
 			break;
 		case 3:
 			for (auto row_it = _matrix->begin(); row_it < _matrix->end(); row_it++) {
-				int tmp = 0;
+				T tmp = 0;
 				for (auto col_it = row_it->begin(); col_it < row_it->end(); col_it++) {
-					tmp += abs(*col_it);
+					tmp += fabs(*col_it);
 				}
+
 				result = (tmp > result) ? tmp : result;
 			}
 			break;
