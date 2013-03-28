@@ -121,20 +121,20 @@ public:
 		_columns = columns;
 	}
 
-	Matrix removeRow(int row) {
-		Matrix result(*this);
-		result.matrix()->erase(result.matrix()->begin() + row);
-		result.setRows(_rows - 1);
-		return result;
+	Matrix& removeRow(int row) {
+		--row;
+		_matrix->erase(_matrix->begin() + row);
+		--_rows;
+		return *this;
 	}
 
-	Matrix removeColumn(int column) {
-		Matrix result(*this);
-		for (auto it = result.matrix()->begin(); it < result.matrix()->end(); it++) {
+	Matrix& removeColumn(int column) {
+		--column;
+		for (auto it = _matrix->begin(); it < _matrix->end(); it++) {
 			it->erase(it->begin() + column);
 		}
-		result.setColumns(_columns - 1);
-		return result;
+		--_columns;
+		return *this;
 	}
 
 	Matrix& transpose() {
@@ -163,13 +163,70 @@ public:
 		(*_matrix)[second] = tmp;
 	}
 
-	void replaceColums(int first, in second) {
-		for (auto it = _matrix->begin(); it < _matrix.end(), it++) {
+	void replaceColumns(int first, int second) {
+		for (auto it = _matrix->begin(); it < _matrix->end(); it++) {
 			int tmp = (*it)[first];
 			(*it)[first] = (*it)[second];
 			(*it)[second] = tmp;
 		}
 	}
+
+	void insertRow(int pos, std::vector<T> row) {
+		--pos;
+		typename std::vector<std::vector<T> >::iterator it = _matrix->begin();
+		_matrix->insert(it + pos, row);
+		_rows++;
+	}
+
+	void insertColumn(int pos, std::vector<T> column) {
+		--pos;
+		for (auto it = _matrix->begin(), col_it = column.begin(); it < _matrix->end(); it++, col_it++) {
+			auto row_it = it->begin();
+			it->insert(row_it + pos, *col_it);
+		}
+	}
+
+	void replaceRow(int pos, std::vector<T> row) {
+		insertRow(pos, row);
+		removeRow(pos + 1);
+	}
+
+	int pNorm(int p) {
+		int result = 0;
+		switch (p) {
+		case 1:
+			for (int i = 0; i < _columns; i++) {
+				int tmp = 0;
+				for (auto row_it = _matrix->begin(); row_it < _matrix->end(); row_it++) {
+					tmp += abs((*row_it)[i]);
+				}
+				result = (tmp > result) ? tmp : result;
+			}
+			break;
+		case 2:
+			for (int i = 0; i < _columns; i++) {
+				int tmp = 0;
+				for (auto row_it = _matrix->begin(); row_it < _matrix->end(); row_it++) {
+					tmp += pow(abs((*row_it)[i]), 2);
+				}
+				tmp = sqrt(tmp);
+				result = (tmp > result) ? tmp : result;
+			}
+
+			break;
+		case 3:
+			for (auto row_it = _matrix->begin(); row_it < _matrix->end(); row_it++) {
+				int tmp = 0;
+				for (auto col_it = row_it->begin(); col_it < row_it->end(); col_it++) {
+					tmp += abs(*col_it);
+				}
+				result = (tmp > result) ? tmp : result;
+			}
+			break;
+		}
+		return result;
+	}
+
 private:
 	int _columns;
 	int _rows;
