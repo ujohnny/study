@@ -74,7 +74,7 @@ public:
 		return result;
 	}
 
-	T determinant() {
+	T determinant() const {
 		Matrix<T> tmp(*this);
 		if (_rows == 2)
 			return ((*_matrix)[0][0] * (*_matrix)[1][1]) - ((*_matrix)[0][1] * (*_matrix)[1][0]);
@@ -86,7 +86,7 @@ public:
 
 	}
 
-	std::vector<T> getColumn(int col) const {
+	std::vector<T> getColumn(size_t col) const {
 		std::vector<T> column;
 		for (auto it = (*_matrix).begin(); it < (*_matrix).end(); it++) {
 			column.push_back((*it)[col]);
@@ -94,43 +94,43 @@ public:
 		return column;
 	}
 
-	std::vector<T> getRow(int row) const {
+	std::vector<T> getRow(size_t row) const {
 		return (*_matrix)[row];
 	}
 
-	std::vector<T>& operator[](int row) const {
+	std::vector<T>& operator[](size_t row) const {
 		return (*_matrix)[row];
 	}
 
-	std::pair<int, int> getDimensions() const {
+	std::pair<size_t, size_t> getDimensions() const {
 		return std::make_pair(rows, columns);
 	}
 
-	inline const int rows() const {
+	inline const size_t rows() const {
 		return _rows;
 	}
-	inline const int columns() const {
+	inline const size_t columns() const {
 		return _columns;
 	}
 	inline std::vector<std::vector<T> >* matrix() const {
 		return _matrix;
 	}
 
-	inline void setRows(int rows) {
+	inline void setRows(size_t rows) {
 		_rows = rows;
 	}
-	inline void setColumns(int columns) {
+	inline void setColumns(size_t columns) {
 		_columns = columns;
 	}
 
-	Matrix& removeRow(int row) {
+	Matrix& removeRow(size_t row) {
 		--row;
 		_matrix->erase(_matrix->begin() + row);
 		--_rows;
 		return *this;
 	}
 
-	Matrix& removeColumn(int column) {
+	Matrix& removeColumn(size_t column) {
 		--column;
 		for (auto it = _matrix->begin(); it < _matrix->end(); it++) {
 			it->erase(it->begin() + column);
@@ -149,9 +149,7 @@ public:
 		}
 		delete _matrix;
 		_matrix = new_matrix;
-		int tmp = _rows;
-		_rows = _columns;
-		_columns = tmp;
+		std::swap(_rows, _columns);
 		return (*this);
 	}
 
@@ -164,17 +162,13 @@ public:
 		}
 	}
 
-	void swapRows(int first, int second) {
-		std::vector<int> tmp = (*_matrix)[first];
-		(*_matrix)[first] = (*_matrix)[second];
-		(*_matrix)[second] = tmp;
+	void swapRows(size_t first, size_t second) {
+		std::swap((*_matrix)[first], (*_matrix)[second]);
 	}
 
 	void swapColumns(int first, int second) {
 		for (auto it = _matrix->begin(); it < _matrix->end(); it++) {
-			int tmp = (*it)[first];
-			(*it)[first] = (*it)[second];
-			(*it)[second] = tmp;
+			std::swap((*it)[first], (*it)[second]);
 		}
 	}
 
@@ -259,6 +253,15 @@ public:
 			break;
 		}
 		return result;
+	}
+
+	friend std::ostream& operator<< (std::ostream& out, const Matrix& m) {
+		std::vector<std::vector<T> > *matrix = m.matrix();
+		for (auto row_it = matrix->begin(); row_it < matrix->end(); row_it++) {
+			for (auto column_it = row_it->begin(); column_it < row_it->end(); column_it++) {
+				out << (*column_it) << "\t";
+			}
+		}
 	}
 
 private:
