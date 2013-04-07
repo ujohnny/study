@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <iostream>
 #include <cmath>
+#include <iomanip>
 
 template <typename T>
 class Matrix {
@@ -29,6 +30,12 @@ public:
 	~Matrix() {
 		delete _matrix;
 	};
+
+	Matrix& operator=(const Matrix& rhs) {
+		_rows = rhs.rows();
+		_columns = rhs.columns();
+		_matrix = new std::vector<std::vector<T> >(*rhs.matrix());
+	}
 
 	const Matrix operator+(const Matrix& rhs) const {
 		Matrix<T> res(_rows, _columns);
@@ -75,15 +82,14 @@ public:
 	}
 
 	T determinant() const {
-		Matrix<T> tmp(*this);
 		if (_rows == 2)
 			return ((*_matrix)[0][0] * (*_matrix)[1][1]) - ((*_matrix)[0][1] * (*_matrix)[1][0]);
 		T result = 0;
 		for (size_t i = 0; i < _columns; i++) {
+			Matrix<T> tmp(*this);
 			result += (*_matrix)[0][i] * pow(-1, i) * (tmp.removeRow(0).removeColumn(i).determinant());
 		}
 		return result;
-
 	}
 
 	std::vector<T> getColumn(size_t col) const {
@@ -124,14 +130,12 @@ public:
 	}
 
 	Matrix& removeRow(size_t row) {
-		--row;
 		_matrix->erase(_matrix->begin() + row);
 		--_rows;
 		return *this;
 	}
 
 	Matrix& removeColumn(size_t column) {
-		--column;
 		for (auto it = _matrix->begin(); it < _matrix->end(); it++) {
 			it->erase(it->begin() + column);
 		}
@@ -173,14 +177,12 @@ public:
 	}
 
 	void insertRow(int pos, std::vector<T> row) {
-		--pos;
 		typename std::vector<std::vector<T> >::iterator it = _matrix->begin();
 		_matrix->insert(it + pos, row);
 		_rows++;
 	}
 
 	void insertColumn(int pos, std::vector<T> column) {
-		--pos;
 		for (auto it = _matrix->begin(), col_it = column.begin(); it < _matrix->end(); it++, col_it++) {
 			auto row_it = it->begin();
 			it->insert(row_it + pos, *col_it);
@@ -259,9 +261,11 @@ public:
 		std::vector<std::vector<T> > *matrix = m.matrix();
 		for (auto row_it = matrix->begin(); row_it < matrix->end(); row_it++) {
 			for (auto column_it = row_it->begin(); column_it < row_it->end(); column_it++) {
-				out << (*column_it) << "\t";
+				out << std::setw(10) << std::left << (*column_it);
 			}
+			out << std::endl;
 		}
+		return out;
 	}
 
 private:
