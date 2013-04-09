@@ -257,11 +257,19 @@ public:
 		return result;
 	}
 
+	T operator^(const Matrix& rhs) {
+		T res = 0;
+		for (int i = 0; i < _columns; i++) {
+			res += (*this)[0][i] * rhs[0][i];
+		}
+		return res;
+	}
+
 	friend std::ostream& operator<< (std::ostream& out, const Matrix& m) {
 		std::vector<std::vector<T> > *matrix = m.matrix();
 		for (auto row_it = matrix->begin(); row_it < matrix->end(); row_it++) {
 			for (auto column_it = row_it->begin(); column_it < row_it->end(); column_it++) {
-				out << std::setw(10) << std::left << (*column_it);
+				out << std::setw(15) << std::left << (*column_it);
 			}
 			out << std::endl;
 		}
