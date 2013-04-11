@@ -57,13 +57,14 @@ public:
 		return res;
 	}
 
-	const Matrix& operator*(T scalar) {
+	const Matrix operator*(T scalar) {
+		Matrix<T> res(_rows, _columns);
 		for (size_t i = 0; i < _rows; i++) {
 			for (size_t j = 0; j < _columns; j++) {
-				(*_matrix)[i][j] *= scalar;
+				res[i][j] = (*_matrix)[i][j] * scalar;
 			}
 		}
-		return (*this);
+		return res;
 	}
 
 	const Matrix operator*(const Matrix& rhs) {
