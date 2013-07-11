@@ -144,18 +144,15 @@ public:
 		return *this;
 	}
 
-	Matrix& transpose() {
-		std::vector<std::vector<T> > *new_matrix = new std::vector<std::vector<T> >(_columns, std::vector<T>(_rows));
+	Matrix transpose() const {
+		Matrix<T> result(_columns, _rows);
 
 		for (size_t i = 0; i < _columns; i++) {
 			for (size_t j = 0; j < _rows; j++) {
-				(*new_matrix)[i][j] = (*_matrix)[j][i];
+				result[i][j] = (*_matrix)[j][i];
 			}
 		}
-		delete _matrix;
-		_matrix = new_matrix;
-		std::swap(_rows, _columns);
-		return (*this);
+		return result;
 	}
 
 	void print(std::ostream& out = std::cout ) const {
@@ -188,6 +185,7 @@ public:
 			auto row_it = it->begin();
 			it->insert(row_it + pos, *col_it);
 		}
+		_columns++;
 	}
 
 	void replaceRow(int pos, std::vector<T> row) {
