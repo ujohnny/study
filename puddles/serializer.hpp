@@ -1,21 +1,21 @@
 #pragma once
 
-#include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
+#include <tuple>
 
 class Serializer {
 
 public:
-
-	Serializer(const std::string& filename);
-	Serializer(const char* filename);
-	~Serializer();
-	std::vector<std::vector<int> > readMatrix();
+	Serializer(std::shared_ptr<std::iostream> ios);
+	void readMatrix(std::vector<std::vector<int> >& matrix
+								, std::vector<std::tuple<int, int, int> >& tuples);
 
 private:
 
 	Serializer();
-	std::ifstream in_file;
+	std::shared_ptr<std::iostream> _stream;
 
 };
