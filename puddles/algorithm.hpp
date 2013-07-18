@@ -1,32 +1,27 @@
 #pragma once
 
+#include <vector>
+#include <queue>
+#include <tuple>
+
+#include "common.hpp"
+
 class Algorithm {
 
 public:
-	std::vector<std::vector<int> > execute(std::vector<std::vector<int> >& matrix
-										   , std::vector<std::tuple<int, int, int>& tuples);
+	Matrix<int> execute(const Matrix<int>& matrix
+										   , const Points<int, int>& tuples);
 
 private:
-	int walk(int x, int y);
+	int walk(const Matrix<int>& matrix, int x, int y);
 
-	inline bool checkLeft(int x, int y) {
-
-	}
-
-	inline bool checkUpper(int x, int y) {
-
-	}
-
-	inline bool checkRight(int x, int y) {
-
-	}
-
-	inline bool checkLower(int x, int y) {
-
-	}
-
-	std::vector<std::vector<int> > used;
-	int mark;
+	bool isBound(const std::pair<int, int>& p) {};
+	void addNeighbours(const std::pair<int, int>& p
+					   , const std::queue<std::pair<int, int> >& q) {};
+	void fillWay(const std::vector<std::pair<int, int> >& way, int min);
 
 
+	Matrix<unsigned> _used;
+	Matrix<int> _puddles;
+	int _mark;
 };

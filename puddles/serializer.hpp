@@ -6,12 +6,14 @@
 #include <memory>
 #include <tuple>
 
+#include "common.hpp"
+
 class Serializer {
 
 public:
 	Serializer(std::shared_ptr<std::iostream> ios);
 	void readMatrix(std::vector<std::vector<int> >& matrix
-								, std::vector<std::tuple<int, int, int> >& tuples);
+								, Points<int, int> & tuples);
 
 private:
 
