@@ -13,14 +13,5 @@ int main(int argc, char **argv) {
 	Algorithm a;
 	Matrix<int> b = a.execute(v, t);
 
-	for (auto el : v) {
-		for (auto val : el) {
-			std::cout << val << " ";
-		}
-		std::cout << std::endl;
-	}
-
-	for (auto el : t) {
-		std::cout << std::get<0>(el) << std::endl;
-	}
+//	std::cout << b << std::endl;
 }
