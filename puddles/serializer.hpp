@@ -12,8 +12,8 @@ class Serializer {
 
 public:
 	Serializer(std::shared_ptr<std::iostream> ios);
-	void readMatrix(std::vector<std::vector<int> >& matrix
-								, Points<int, int> & tuples);
+	void readMatrix(Matrix<int>& matrix
+								, Points<int> & tuples);
 
 private:
 

@@ -10,30 +10,30 @@ class Algorithm {
 
 public:
 	Matrix<int> execute(const Matrix<int>& matrix
-						, const Points<int, int>& tuples);
+						, const Points<int>& tuples);
 
 private:
 	int walk(const Matrix<int>& matrix, int x, int y);
 
 	void addNeighbours(const Matrix<int>& matrix
-					   , const Point<int>& start
-					   , const Point<int>& point
-					   , std::stack<Point<int> >& stack);
+					   , const Point& start
+					   , const Point& point
+					   , std::stack<Point >& stack);
 
 	void fillWay(const Matrix<int>& Matrix
-				 ,const std::vector<Point<int> >& way, int min);
+				 ,const std::vector<Point >& way, int min);
 
 	int recalcMin(const Matrix<int>& matrix, int min
-				 , const Point<int>& start, const Point<int>& p);
+				 , const Point& start, const Point& p);
 
-	void revertStack(std::stack<Point<int> >& s
+	void revertStack(std::stack<Point >& s
 					 , const Matrix<int>& matrix
 					 , int min);
 
 
 	inline bool checkPoint(const Matrix<int>& matrix
-						   , const Point<int>& start
-						   , const Point<int>& target) {
+						   , const Point& start
+						   , const Point& target) {
 		int x1 = start.first;
 		int y1 = start.second;
 
@@ -44,29 +44,29 @@ private:
 	}
 
 	inline bool isBound(const Matrix<int>& matrix
-						, const Point<int>& p) {
+						, const Point& p) {
 		return (p.first == 0 || p.second == 0
 				|| p.first == matrix.size() - 1
 				|| p.second == matrix[matrix.size() - 1].size() - 1); //HOLY SHIT!
 	}
 
-	inline void markPoint(const Point<int>& p) {
+	inline void markPoint(const Point& p) {
 		_used[p.first][p.second] = _mark;
 	}
 
-	inline Point<int> top(const Point<int>& p) {
+	inline Point top(const Point& p) {
 		return std::make_pair(p.first - 1, p.second);
 	}
 
-	inline Point<int> bottom(const Point<int>& p) {
+	inline Point bottom(const Point& p) {
 		return std::make_pair(p.first + 1, p.second);
 	}
 
-	inline Point<int> left(const Point<int>& p) {
+	inline Point left(const Point& p) {
 		return std::make_pair(p.first, p.second - 1);
 	}
 
-	inline Point<int> right(const Point<int>& p) {
+	inline Point right(const Point& p) {
 		return std::make_pair(p.first, p.second + 1);
 	}
 

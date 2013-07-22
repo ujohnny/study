@@ -7,8 +7,8 @@ Serializer::Serializer(std::shared_ptr<std::iostream> ios)
 {
 }
 
-void Serializer::readMatrix(std::vector<std::vector<int> >& matrix
-							, Points<int, int>& tuples)
+void Serializer::readMatrix(Matrix<int>& matrix
+							, Points<int>& tuples)
 {
 	int height = 0
 		, width = 0;

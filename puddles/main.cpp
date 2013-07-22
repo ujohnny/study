@@ -6,7 +6,7 @@
 int main(int argc, char **argv) {
 	Serializer s(std::make_shared<std::fstream>("puddles.in", std::fstream::in));
 	Matrix<int> v;
-	Points<int, int> t;
+	Points<int> t;
 	s.readMatrix(v, t);
 
 

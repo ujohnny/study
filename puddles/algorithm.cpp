@@ -1,7 +1,7 @@
 #include "algorithm.hpp"
 
 Matrix<int> Algorithm::execute(const Matrix<int>& matrix
-												  , const Points<int, int>& tuples) {
+												  , const Points<int>& tuples) {
 	int height = matrix.size();
 	int width = matrix[height - 1].size();
 
@@ -27,14 +27,14 @@ int Algorithm::walk(const Matrix<int>& matrix, int x, int y) {
 	int min = 1 << 30;
 
 	_used[x][y] = _mark;
-	Point<int> start = std::make_pair(x, y);
-	std::vector<Point<int> > way;
+	Point start = std::make_pair(x, y);
+	std::vector<Point > way;
 
-	std::stack<Point<int> > s;
+	std::stack<Point > s;
 	s.push(start);
 
 	while (!s.empty()) {
-		Point<int> p = s.top();
+		Point p = s.top();
 		s.pop();
 
 		if (isBound(matrix, p)) {
@@ -52,7 +52,7 @@ int Algorithm::walk(const Matrix<int>& matrix, int x, int y) {
 }
 
 void Algorithm::fillWay(const Matrix<int>& matrix
-						, const std::vector<Point<int> >& way, int min) {
+						, const std::vector<Point >& way, int min) {
 	for (auto el : way) {
 		int x = el.first;
 		int y = el.second;
@@ -62,9 +62,9 @@ void Algorithm::fillWay(const Matrix<int>& matrix
 }
 
 void Algorithm::addNeighbours(const Matrix<int>& matrix
-							  , const Point<int>& start
-							  , const Point<int>& point
-							  , std::stack<Point<int> >& stack)
+							  , const Point& start
+							  , const Point& point
+							  , std::stack<Point >& stack)
 {
 	if (checkPoint(matrix, start, left(point))) {
 		stack.push(left(point));
@@ -85,7 +85,7 @@ void Algorithm::addNeighbours(const Matrix<int>& matrix
 }
 
 int Algorithm::recalcMin(const Matrix<int>& matrix, int min
-			   , const Point<int>& start, const Point<int>& p)
+			   , const Point& start, const Point& p)
 {
 	if (matrix[p.first - 1][p.second] > matrix[start.first][start.second])
 		min = (matrix[p.first - 1][p.second] < min)
@@ -105,7 +105,7 @@ int Algorithm::recalcMin(const Matrix<int>& matrix, int min
 	return min;
 }
 
-void Algorithm::revertStack(std::stack<Point<int> >& s
+void Algorithm::revertStack(std::stack<Point >& s
 							, const Matrix<int>& matrix
 							, int min)
 {

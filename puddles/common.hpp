@@ -2,14 +2,13 @@
 
 #include <iostream>
 
+typedef std::pair<int, int> Point;
+
 template <typename T>
 using Matrix = std::vector<std::vector<T> >;
 
-template <typename T1, typename T2>
-using Points = std::vector<std::tuple<T1, T2, T2> >;
-
 template <typename T>
-using Point = std::pair<T, T>;
+using Points = std::vector<std::tuple<T, int, int> >;
 
 template<typename T>
 std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
