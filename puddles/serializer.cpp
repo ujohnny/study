@@ -19,7 +19,7 @@ void Serializer::readMatrix(Matrix<int>& matrix
 						 , std::vector<int>(width));
 
 	for (int i = 0; i < height; i++) {
-		for (int j = 0; j < height; j++) {
+		for (int j = 0; j < width; j++) {
 			int value = 0;
 			(*_stream) >> value;
 			matrix[i][j] = value;

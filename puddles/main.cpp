@@ -9,7 +9,6 @@ int main(int argc, char **argv) {
 	Points<int> t;
 	s.readMatrix(v, t);
 
-
 	Algorithm a;
 	Matrix<int> b = a.execute(v, t);
 
