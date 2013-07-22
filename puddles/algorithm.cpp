@@ -1,7 +1,7 @@
 #include "algorithm.hpp"
 
 Matrix<int> Algorithm::execute(const Matrix<int>& matrix
-												  , const Points<int>& tuples) {
+							   , const Points<int>& tuples) {
 	int height = matrix.size();
 	int width = matrix[height - 1].size();
 
@@ -70,14 +70,17 @@ void Algorithm::addNeighbours(const Matrix<int>& matrix
 		stack.push(left(point));
 		markPoint(left(point));
 	}
+
 	if (checkPoint(matrix, start, right(point))) {
 		stack.push(right(point));
 		markPoint(right(point));
 	}
+
 	if (checkPoint(matrix, start, top(point))) {
 		stack.push(top(point));
 		markPoint(top(point));
 	}
+
 	if (checkPoint(matrix, start, bottom(point))) {
 		stack.push(bottom(point));
 		markPoint(bottom(point));
@@ -85,23 +88,27 @@ void Algorithm::addNeighbours(const Matrix<int>& matrix
 }
 
 int Algorithm::recalcMin(const Matrix<int>& matrix, int min
-			   , const Point& start, const Point& p)
+						 , const Point& start, const Point& p)
 {
-	if (matrix[p.first - 1][p.second] > matrix[start.first][start.second])
+	if (matrix[p.first - 1][p.second] > matrix[start.first][start.second]) {
 		min = (matrix[p.first - 1][p.second] < min)
 			? matrix[p.first - 1][p.second] : min;
+	}
 
-	if (matrix[p.first + 1][p.second] > matrix[start.first][start.second])
+	if (matrix[p.first + 1][p.second] > matrix[start.first][start.second]) {
 		min = (matrix[p.first + 1][p.second] < min)
 			? matrix[p.first + 1][p.second] : min;
+	}
 
-	if (matrix[p.first][p.second - 1] > matrix[start.first][start.second])
+	if (matrix[p.first][p.second - 1] > matrix[start.first][start.second]) {
 		min = (matrix[p.first][p.second - 1] < min)
 			? matrix[p.first][p.second - 1] : min;
+	}
 
-	if (matrix[p.first][p.second + 1] > matrix[start.first][start.second])
+	if (matrix[p.first][p.second + 1] > matrix[start.first][start.second]) {
 		min = (matrix[p.first][p.second + 1] < min)
 			? matrix[p.first][p.second + 1] : min;
+	}
 	return min;
 }
 
@@ -115,7 +122,8 @@ void Algorithm::revertStack(std::stack<Point >& s
 
 		int i = el.first;
 		int j = el.second;
-		if (matrix[i][j] - min > 0 )
+		if (matrix[i][j] - min > 0) {
 			_puddles[i][j] = 0;
+		}
 	}
 }
