@@ -13,5 +13,5 @@ int main(int argc, char **argv) {
 	Algorithm a;
 	Matrix<int> b = a.execute(v, t);
 
-//	std::cout << b << std::endl;
+	std::cout << b << std::endl;
 }

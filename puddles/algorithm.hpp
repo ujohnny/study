@@ -23,6 +23,14 @@ private:
 	void fillWay(const Matrix<int>& Matrix
 				 ,const std::vector<Point<int> >& way, int min);
 
+	int recalcMin(const Matrix<int>& matrix, int min
+				 , const Point<int>& start, const Point<int>& p);
+
+	void revertStack(std::stack<Point<int> >& s
+					 , const Matrix<int>& matrix
+					 , int min);
+
+
 	inline bool checkPoint(const Matrix<int>& matrix
 						   , const Point<int>& start
 						   , const Point<int>& target) {
@@ -40,6 +48,10 @@ private:
 		return (p.first == 0 || p.second == 0
 				|| p.first == matrix.size() - 1
 				|| p.second == matrix[matrix.size() - 1].size() - 1); //HOLY SHIT!
+	}
+
+	inline void markPoint(const Point<int>& p) {
+		_used[p.first][p.second] = _mark;
 	}
 
 	inline Point<int> top(const Point<int>& p) {

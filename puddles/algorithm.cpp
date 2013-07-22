@@ -38,37 +38,13 @@ int Algorithm::walk(const Matrix<int>& matrix, int x, int y) {
 		s.pop();
 
 		if (isBound(matrix, p)) {
-			while (!s.empty()) {
-				auto el = s.top();
-				s.pop();
-
-				int i = el.first;
-				int j = el.second;
-				if (matrix[i][j] - min > 0 )
-					_puddles[i][j] = 0;
-			}
+			revertStack(s, matrix, min);
 			return 0;
 		}
 
 		way.push_back(p);
 
-		if (matrix[p.first - 1][p.second] > matrix[x][y])
-			min = (matrix[p.first - 1][p.second] < min)
-				? matrix[p.first - 1][p.second] : min;
-
-		if (matrix[p.first + 1][p.second] > matrix[x][y])
-			min = (matrix[p.first + 1][p.second] < min)
-				? matrix[p.first + 1][p.second] : min;
-
-		if (matrix[p.first][p.second - 1] > matrix[x][y])
-			min = (matrix[p.first][p.second - 1] < min)
-				? matrix[p.first][p.second - 1] : min;
-
-		if (matrix[p.first][p.second + 1] > matrix[x][y])
-			min = (matrix[p.first][p.second + 1] < min)
-				? matrix[p.first][p.second + 1] : min;
-
-
+		min = recalcMin(matrix, min, start, p);
 		addNeighbours(matrix, start, p, s);
 	}
 	fillWay(matrix, way, min);
@@ -92,18 +68,54 @@ void Algorithm::addNeighbours(const Matrix<int>& matrix
 {
 	if (checkPoint(matrix, start, left(point))) {
 		stack.push(left(point));
-		_used[point.first][point.second - 1] = _mark;
+		markPoint(left(point));
 	}
 	if (checkPoint(matrix, start, right(point))) {
 		stack.push(right(point));
-		_used[point.first][point.second + 1] = _mark;
+		markPoint(right(point));
 	}
 	if (checkPoint(matrix, start, top(point))) {
 		stack.push(top(point));
-		_used[point.first - 1][point.second] = _mark;
+		markPoint(top(point));
 	}
 	if (checkPoint(matrix, start, bottom(point))) {
 		stack.push(bottom(point));
-		_used[point.first + 1][point.second] = _mark;
+		markPoint(bottom(point));
+	}
+}
+
+int Algorithm::recalcMin(const Matrix<int>& matrix, int min
+			   , const Point<int>& start, const Point<int>& p)
+{
+	if (matrix[p.first - 1][p.second] > matrix[start.first][start.second])
+		min = (matrix[p.first - 1][p.second] < min)
+			? matrix[p.first - 1][p.second] : min;
+
+	if (matrix[p.first + 1][p.second] > matrix[start.first][start.second])
+		min = (matrix[p.first + 1][p.second] < min)
+			? matrix[p.first + 1][p.second] : min;
+
+	if (matrix[p.first][p.second - 1] > matrix[start.first][start.second])
+		min = (matrix[p.first][p.second - 1] < min)
+			? matrix[p.first][p.second - 1] : min;
+
+	if (matrix[p.first][p.second + 1] > matrix[start.first][start.second])
+		min = (matrix[p.first][p.second + 1] < min)
+			? matrix[p.first][p.second + 1] : min;
+	return min;
+}
+
+void Algorithm::revertStack(std::stack<Point<int> >& s
+							, const Matrix<int>& matrix
+							, int min)
+{
+	while (!s.empty()) {
+		auto el = s.top();
+		s.pop();
+
+		int i = el.first;
+		int j = el.second;
+		if (matrix[i][j] - min > 0 )
+			_puddles[i][j] = 0;
 	}
 }
