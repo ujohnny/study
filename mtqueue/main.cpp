@@ -9,7 +9,7 @@ int main() {
 	Queue<int> q;
 
 	auto f1 = [&]() {
-		std::auto_ptr<int> c = q.pop();
+		Queue<int>::iterator c = q.pop();
 		std::cout << *c << std::endl;
 	};
 
