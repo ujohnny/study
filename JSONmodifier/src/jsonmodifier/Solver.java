@@ -70,20 +70,16 @@ public class Solver implements Runnable {
                         if (s == null) {
                             shutdown = true;
                             inQueue.add("END");
-                            break;
+                            while (!(cd.getCount() == 1)) {}
+                            writeCache(writer);
+                            cd.countDown();
+                            return;
                         }
                         inQueue.add(s);
                     }
 
                     if (outQueue.size() > outThresholdSize) {
                         writeCache(writer);
-                    }
-                    
-                    if (shutdown) {
-                        while (!(cd.getCount() == 1)) {}
-                        writeCache(writer);
-                        cd.countDown();
-                        return;
                     }
                 }
             } catch ( IOException | InterruptedException ex) {
